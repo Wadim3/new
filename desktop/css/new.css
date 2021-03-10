@@ -68,3 +68,34 @@ opacity:0;
 .sel_page{
   background-color:#10111f;
 }
+.down_icon{
+  width:20px;
+  margin:0 5px;
+}
+.fil_span{
+  background-color:transparent;
+  cursor:pointer;
+  z-index:1;
+  position:absolute;
+  top:0;
+  bottom:0;
+  right:0;
+  left:0;
+}
+.all_game{
+  text-align:center;
+  margin:10px;
+  font-size:larger;
+  background-color:#13182f;
+  padding:10px;
+  border:2px solid #111833;
+  cursor:pointer;
+  transition:background-color 0.3s ease-in-out, border-color 0.3s;
+}
+.select_cat{
+  background-color:#c45d11;
+  color:#080813;
+}
+.select_cat > .cat_link{
+  color:inherit;
+}

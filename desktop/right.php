@@ -23,10 +23,11 @@
         <select class="search_item select-css first_line_item" name="sort" id="search-sort" size="1">
           <option value="name">По имени</option>
           <option value="date">По дате</option>
-          <option value="rating">По рейтингу</option>
+          <option value="rating" selected>По рейтингу</option>
           <option value="popular">По просмотрам</option>
         </select>
         <select class="search_item select-css first_line_item" name="search-categorie" id="search-cat" size="1">
+          <option class="opt-cat" value>Категория</option>
           <?
 foreach ($cat as $name) {
   echo '<option class="opt-cat" value="' . $name[1] . '">' . $name[1] . '</option>';
@@ -37,6 +38,7 @@ foreach ($cat as $name) {
           <option value>Язык Озвучки</option>
           <option value="russian">Русский</option>
           <option value="english">Английский</option>
+          <option value="other">Другое</option>
         </select>
 
         <div id="slider_year" class="pub_year"></div>

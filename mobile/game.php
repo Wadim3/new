@@ -59,7 +59,6 @@ function getPage($sqlreq)
 }
 function searchSqlGame($link, $sqlrequest)
 {
-  // echo $sqlrequest;
   if ($link->multi_query($sqlrequest)) {
     if ($result = $link->store_result()) {
       $count = $result->fetch_assoc();
