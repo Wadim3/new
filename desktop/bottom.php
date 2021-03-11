@@ -1,6 +1,6 @@
 <div class="bottom_content">
   <h3 class="wait">Самые Ожидаемые Новинки</h3>
-  <div class="wait_content">
+  <div id="wait_content">
     <?
 $request = "SELECT `name`, `image` FROM `game` ORDER BY `date`, `views` LIMIT 0,5";
 $wait = $mysqli->query($request);

@@ -1,5 +1,5 @@
 <div id="to_top" class="slider">
-  <div class="slider__wrapper">
+  <div id="slider__wrapper">
     <?
 $getTopGame = "SELECT * FROM `game` ORDER BY `downloads` DESC,`views` DESC LIMIT 0,12";
 $top = $mysqli->query($getTopGame);

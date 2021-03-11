@@ -168,7 +168,14 @@ function noticeAll(text, type = 0) {
     block.remove();
   }, 3900);
 }
+function loadCat(e) {}
 (function () {
   loadNew(location.search);
+  document.getElementById("js-load_cat").addEventListener("click", loadCat);
+  document
+    .getElementById("slider__wrapper")
+    .addEventListener("click", loadGame);
+  document.getElementById("wait_content").addEventListener("click", loadGame);
+  document.getElementById("content-js").addEventListener("click", contentHand);
 })();
 window.onpopstate = () => {};

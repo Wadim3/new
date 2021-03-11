@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="search">
-      <form class="search_grid" action="" method="GET">
+      <form id="search_grid" action="" method="GET">
         <select class="search_item select-css first_line_item" name="sort" id="search-sort" size="1">
           <option value="name">По имени</option>
           <option value="date">По дате</option>
