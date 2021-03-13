@@ -1,6 +1,79 @@
-
-  <body>
-    
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body width="100%">
+    <svg
+      version="1.1"
+      id="Слой_2_1_"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      x="0px"
+      y="0px"
+      width="3000px"
+      viewBox="0 0 1920 1080"
+      style="enable-background: new 0 0 1920 1080"
+      xml:space="preserve"
+    >
+      <style type="text/css">
+        .st0 {
+          fill: none;
+          stroke: #fea47c;
+          stroke-width: 2;
+          stroke-miterlimit: 10;
+        }
+        .st1 {
+          fill: none;
+          stroke: #fea47c;
+          stroke-width: 2;
+          stroke-linecap: round;
+          stroke-miterlimit: 5;
+          stroke-dasharray: 40, 5, 10, 5, 80, 5;
+        }
+        .test {
+          stroke: #fea47c;
+        }
+      </style>
+      <defs>
+        <filter id="f1">
+          <feFlood
+            flood-color="#e63233"
+            flood-opacity="0.7"
+            in="SourceGraphic"
+          />
+          <feComposite operator="in" in2="SourceGraphic" />
+          <feGaussianBlur stdDeviation="1.2" />
+          <feComponentTransfer result="glow1">
+            <feFuncA type="linear" slope="4" intercept="0" />
+          </feComponentTransfer>
+          <feMerge>
+            <feMergeNode in="glow1" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+      <path
+        filter="url(#f1)"
+        class="st0 test"
+        d="M959.1,504.5l-39.2,69.8c-0.4,0.7,0.1,1.5,0.9,1.5h78.5c0.8,0,1.3-0.8,0.9-1.5l-39.2-69.8
+      C960.5,503.8,959.5,503.8,959.1,504.5z"
+      />
+      <path
+        filter="url(#f1)"
+        class="st1 test"
+        d="M986.7,568.6h-53c-0.8,0-1.2-0.8-0.9-1.5l26.5-48.8c0.4-0.7,1.4-0.7,1.8,0l26.5,48.8
+      C988,567.8,987.5,568.6,986.7,568.6z"
+      />
+      <circle filter="url(#f1)" class="st0 test" cx="960" cy="560" r="2.6" />
+      <path
+        filter="url(#f1)"
+        class="st0 test"
+        d="M962.2,553.6c-1.5,0-3,0-4.5,0c-0.3-6.5-0.5-13-0.8-19.5c2,0,4,0,6.1,0C962.8,540.6,962.5,547.1,962.2,553.6z"
+      />
+    </svg>
   </body>
 </html>
 

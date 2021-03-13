@@ -4,7 +4,7 @@
 $getTopGame = "SELECT * FROM `game` ORDER BY `downloads` DESC,`views` DESC LIMIT 0,12";
 $top = $mysqli->query($getTopGame);
 while ($res = $top->fetch_assoc()) {
-  echo '<div class="slider__item second_item"><div class="cent__item"><img class="slider__img" src="' . $res['image'] . '" alt="' . $res['name'] . '" /><div class="title_item">' . $res['name'] . '</div></div></div>';
+  echo '<div class="slider__item second_item"><div class="cent__item"><img class="slider__img" src="' . $res['image'] . '" alt="' . $res['name'] . '" /><span class="fil_span" data-url="?art=' . $res["game_id"] . '"></span><div class="title_item">' . $res['name'] . '</div></div></div>';
 }
 ?>
   </div>

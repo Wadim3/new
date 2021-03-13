@@ -15,14 +15,26 @@ function parseURL(url) {
   return new URLSearchParams(url);
 }
 function loadNew(params) {
+  let contBlock = document.getElementById("content-js");
+  if (sessionStorage.getItem(params) !== null) {
+    contBlock.innerHTML = "";
+    contBlock.append(generCont(JSON.parse(sessionStorage.getItem(params))));
+    pagesReload();
+    console.info("add localstorage1234");
+    return;
+  }
   fetch("lgame.php" + params)
     .then(fetchHandler)
-    .then(json)
+    .then(text)
     .then((res) => {
-      let contBlock = document.getElementById("content-js");
-      contBlock.append(generCont(res));
-      console.log(res);
+      contBlock.innerHTML = "";
+      if (sessionStorage.getItem(params) === null) {
+        sessionStorage.setItem(params, res);
+        console.info("add localstorage 1 ");
+      }
+      contBlock.append(generCont(JSON.parse(res)));
       pagesReload();
+      console.log(res);
     })
     .catch((error) => {
       noticeAll("Код ошибки:" + error, 1);
@@ -64,6 +76,9 @@ function generCont(json) {
       filSpan = create("span", "fil_span");
     imgItem.src = json[key][5];
     imgItem.alt = json[key][1];
+    imgItem.onerror = function () {
+      this.src = "asset/err_image.svg";
+    };
     nameGame.innerText = json[key][1];
     filSpan.setAttribute("data-href", "?art=" + json[key][0]);
     imgBlock.append(filSpan, imgItem, nameGame);
@@ -109,7 +124,10 @@ function pagesReload() {
       let second = allPage - curPage >= 2 ? Number(curPage) + 2 : allPage;
       for (let i = first; i <= second; i++) {
         let newlink = link.cloneNode();
-        newlink.href = "?" + location.search + "&page=" + i;
+        urlParsed.set("page", i);
+        newlink.href = "?" + urlParsed.toString();
+        newlink.setAttribute("data-url", "?" + urlParsed.toString());
+        newlink.addEventListener("click", pageLoad);
         newlink.innerText = i;
         if (i == curPage) {
           let curP = create("span");
@@ -122,8 +140,11 @@ function pagesReload() {
       }
       frag.append(space);
       let newlink = link.cloneNode();
-      newlink.href = "?" + location.search + "&page=" + allPage;
+      urlParsed.set("page", allPage);
+      newlink.href = "?" + urlParsed.toString();
       newlink.innerText = allPage;
+      newlink.setAttribute("data-url", "?" + urlParsed.toString());
+      newlink.addEventListener("click", pageLoad);
       frag.append(newlink);
       blockPage.appendChild(frag);
     })
@@ -168,14 +189,65 @@ function noticeAll(text, type = 0) {
     block.remove();
   }, 3900);
 }
-function loadCat(e) {}
+function rnamePage(name) {
+  document.title = name;
+  document.getElementById("rename_page-js").innerText = name;
+}
+function loadCat(e) {
+  e.preventDefault();
+  let tar = e.target;
+  if (tar.classList.contains("cat_list")) tar = tar.firstChild;
+  if (!tar.hasAttribute("data-url")) return;
+  let state = {
+    url: "?" + tar.getAttribute("data-url"),
+    title: tar.innerText,
+    xPage: window.pageYOffset || document.documentElement.scrollTop,
+  };
+  history.pushState(state, state.title, state.url);
+  rnamePage(tar.innerText);
+
+  loadNew("?" + tar.getAttribute("data-url"));
+}
+function pageLoad(e) {
+  e.preventDefault();
+  if (this.classList.contains("page_num")) {
+    let title = document.title.split("|") + "Страница " + this.innerText;
+    let state = {
+      url: this.getAttribute("data-url"),
+      title: title,
+      xPage: window.pageYOffset || document.documentElement.scrollTop,
+    };
+    history.pushState(state, state.title, state.url);
+    document.getElementById("rename_page-js").scrollIntoView();
+    rnamePage(title);
+    loadNew(this.getAttribute("data-url"));
+  }
+}
+function loadGame(e) {
+  let tar = e.target;
+  if (!tar.hasAttribute("data-url")) return;
+  let title = tar.nextElementSibling.innerText;
+  let state = {
+    url: tar.getAttribute("data-url"),
+    title: title,
+    xPage: window.pageYOffset || document.documentElement.scrollTop,
+  };
+  history.pushState(state, state.title, state.url);
+  document.getElementById("rename_page-js").scrollIntoView();
+  rnamePage(title);
+  loadNew(tar.getAttribute("data-url"));
+}
 (function () {
   loadNew(location.search);
   document.getElementById("js-load_cat").addEventListener("click", loadCat);
   document
     .getElementById("slider__wrapper")
     .addEventListener("click", loadGame);
-  document.getElementById("wait_content").addEventListener("click", loadGame);
-  document.getElementById("content-js").addEventListener("click", contentHand);
+  // document.getElementById("wait_content").addEventListener("click", loadGame);
+  // document.getElementById("content-js").addEventListener("click", contentHand);
 })();
-window.onpopstate = () => {};
+window.onpopstate = (e) => {
+  loadNew(location.search);
+  rnamePage(history.state.title);
+  window.scrollTo(0, history.state.xPage);
+};

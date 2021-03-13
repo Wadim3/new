@@ -246,10 +246,10 @@ header {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(40%, 2fr));
   grid-gap: 0.5vw;
-  /* position: relative; */
 }
 .img_item {
   display: block;
+  height: 268px;
   width: 100%;
 }
 .img_block {
@@ -281,6 +281,7 @@ header {
 }
 .table_content .img_item {
   width: 95%;
+  height:283px;
 }
 .table_content .name_game {
   font-size: 1.13rem;

@@ -1,7 +1,7 @@
 <div class="left_content">
   <div id="js-load_cat" class="categorie">
     <h2 class="cat_title">Категории</h2>
-    <div class="all_game"><a class="cat_link" href="/">Все игры</a></div>
+    <div class="all_game"><a data-url="" class="cat_link" href="/desktop/">Все игры</a></div>
     <ul id="js_cat">
       <?
 $category = $mysqli->query("SELECT `category`.* FROM `category`");

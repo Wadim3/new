@@ -2,7 +2,7 @@
   <div class="cont_cent">
     <div class="title_categorie">
       <div class="cat_name">
-        <h3>Categorie name</h3>
+        <h3 id="rename_page-js">Categorie name</h3>
       </div>
       <div class="switch_btn">
         <span class="line_view">
