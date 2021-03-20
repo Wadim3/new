@@ -1,0 +1,109 @@
+.block-art {
+  background-color: #0a0b14;
+  padding: 20px;
+}
+.short__desc{
+  display:flex;
+  padding:10px;
+}
+.right__short-desc{
+  width: 80%;
+  font-size:smaller;
+  padding:0 20px 0 40px;
+}
+.left__short-desc{
+  width: 20%;
+  text-align:center;
+  margin:7px 0 0 0;
+}
+.game__image{
+  width:100%;
+}
+.cont__block{
+  margin: 10px 0 20px 0;
+  padding:5px;
+}
+.title_block{
+  font-size:x-large;
+  margin:10px 0 10px -5px;
+  color:#c45d11;
+}
+.content-screenshot{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  grid-gap: 0.5vw;
+}
+.screenshot-item{
+  width:100%;
+}
+.youtube__block {
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  margin: 15px 0;
+  text-align: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  padding: 0 0 56.25% 0;
+  will-change: contents;
+}
+.filter {
+  z-index: 9;
+  position: absolute;
+  background-color: rgb(0 0 0 / 31%);
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  transition: background-color 0.2s linear;
+  will-change: background-color;
+}
+.youtube__block .iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-width: 0;
+  outline-width: 0;
+}
+
+.yo_icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-width: 0;
+  outline-width: 0;
+  display: flex;
+}
+.play_icon {
+  z-index: 99;
+  will-change: filter;
+  transition: filter 0.2s linear;
+  margin: auto;
+  transform: scale(1.7);
+}
+.play_icon:hover {
+  filter: brightness(1.5);
+}
+.file-elem{
+  display:flex;
+  flex-flow:column nowrap;
+  align-items:center;
+  margin:10px 0;
+}
+.file-in{
+  margin:10px;
+  padding:12px 40px;
+  border-radius: 11px;
+  background-color:#1b183a;
+}
+.file{
+  text-decoration:none;
+  color:#7893aa;
+}
+.content-video{
+  padding:20px;
+}

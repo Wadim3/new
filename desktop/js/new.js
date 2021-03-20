@@ -16,13 +16,13 @@ function parseURL(url) {
 }
 function loadNew(params) {
   let contBlock = document.getElementById("content-js");
-  if (sessionStorage.getItem(params) !== null) {
-    contBlock.innerHTML = "";
-    contBlock.append(generCont(JSON.parse(sessionStorage.getItem(params))));
-    pagesReload();
-    console.info("add localstorage1234");
-    return;
-  }
+  // if (sessionStorage.getItem(params) !== null) {
+  //   contBlock.innerHTML = "";
+  //   generHand(sessionStorage.getItem(params));
+  //   pagesReload();
+  //   console.info("add localstorage1234");
+  //   return;
+  // }
   fetch("lgame.php" + params)
     .then(fetchHandler)
     .then(text)
@@ -32,7 +32,7 @@ function loadNew(params) {
         sessionStorage.setItem(params, res);
         console.info("add localstorage 1 ");
       }
-      contBlock.append(generCont(JSON.parse(res)));
+      generHand(res, params, contBlock);
       pagesReload();
       console.log(res);
     })
@@ -40,6 +40,19 @@ function loadNew(params) {
       noticeAll("Код ошибки:" + error, 1);
       console.error(error);
     });
+}
+function generHand(res, par, bl) {
+  let url = parseURL(par);
+  let json = JSON.parse(res);
+  if (url.has("ct")) {
+    bl.append(generCont(json));
+  } else if (url.has("art")) {
+    console.log(json[0]);
+    window.testVar = json[0];
+    bl.append(generArt(json));
+  } else {
+    bl.append(generCont(json));
+  }
 }
 function create(elem, classn = "") {
   let block = document.createElement(elem);
@@ -50,7 +63,6 @@ function rebCateg() {
   let url = parseURL(location.search);
   if ((selDel = document.querySelector(".select_cat")))
     selDel.classList.remove("select_cat");
-
   if (
     url.has("ct") &&
     (curUrl = document.querySelector("[data-url='ct=" + url.get("ct") + "']"))
@@ -80,7 +92,7 @@ function generCont(json) {
       this.src = "asset/err_image.svg";
     };
     nameGame.innerText = json[key][1];
-    filSpan.setAttribute("data-href", "?art=" + json[key][0]);
+    filSpan.setAttribute("data-url", "?art=" + json[key][0]);
     imgBlock.append(filSpan, imgItem, nameGame);
     genre.innerHTML = "Жанр: " + json[key][9];
     views.innerHTML =
@@ -102,8 +114,107 @@ function generCont(json) {
   }
   return frag;
 }
+function generArt(json) {
+  let frag = document.createDocumentFragment(),
+    content = create("div", "block-art"),
+    shortDesc = create("div", "cont__block short__desc"),
+    left = create("div", "left__short-desc"),
+    img = create("img", "game__image"),
+    right = create("div", "right__short-desc"),
+    requires = create("div", "content-requires"),
+    full = create("div", "cont__block full-desc"),
+    fullTitle = create("div", "title_block"),
+    description = create("div", "content-desc"),
+    screenshots = create("div", "cont__block screenshot-block"),
+    screenTitle = create("div", "title_block"),
+    contScreen = create("div", "content-screenshot"),
+    video = create("div", "cont__block video_block"),
+    vidTitle = create("div", "title_block"),
+    contVid = create("div", "content-video"),
+    file = create("div", "cont__block file-block"),
+    thisjson = json[0],
+    media = JSON.parse(thisjson[3]),
+    specify = JSON.parse(thisjson[2]),
+    torrent = thisjson[4] ? JSON.parse(thisjson[4]) : "";
+  img.src = thisjson[6];
+  img.alt = thisjson[5];
+  rnamePage(thisjson[5]);
+  fullTitle.innerText = "Описание:";
+  description.innerHTML = thisjson[1];
+  screenTitle.innerText = "Скриншоты:";
+  vidTitle.innerText = "Видео:";
+  for (const key in specify) {
+    if (Object.hasOwnProperty.call(specify, key)) {
+      const element = specify[key];
+      let nameChara = create("span", "requires_name");
+      let valueChara = create("span", "requires_value");
+      let br = create("br");
+      nameChara.innerHTML = key + ": ";
+      valueChara.innerHTML = element;
+      requires.append(nameChara, valueChara, br);
+    }
+  }
+
+  for (const key in media.screenshot) {
+    if (Object.hasOwnProperty.call(media.screenshot, key)) {
+      const element = media.screenshot[key];
+      let screenItem = create("img", "screenshot-item");
+      screenItem.src = element;
+      screenItem.alt = sessionStorage.getItem("title");
+      contScreen.append(screenItem);
+    }
+  }
+  for (const key in media.video) {
+    if (Object.hasOwnProperty.call(media.video, key)) {
+      const element = media.video[key];
+      let youtBlock = create("div", "youtube__block");
+      youtBlock.id = element;
+      youtBlock.style.backgroundImage =
+        "url(https://i.ytimg.com/vi/" + element + "/mqdefault.jpg)";
+      youtBlock.innerHTML =
+        "<div class='filter'></div><div class='yo_icon'><img class='play_icon' src='asset/play__icons.svg'></div>";
+      contVid.append(youtBlock);
+    }
+  }
+  for (const key in torrent) {
+    if (Object.hasOwnProperty.call(torrent, key)) {
+      const element = torrent[key];
+      let fileElem = create("div", "file-elem");
+      let size = create("div", "file_size");
+      size.innerText = element;
+      let fileIn = create("span", "file-in");
+      let fileUrl = create("a", "file");
+      fileUrl.href = key;
+      fileUrl.innerText = "Скачать";
+      fileIn.append(fileUrl);
+      fileElem.append(size, fileIn);
+      file.append(fileElem);
+    }
+  }
+  sessionStorage.removeItem("image");
+  sessionStorage.removeItem("title");
+  left.append(img);
+  right.append(requires);
+  shortDesc.append(left, right);
+  full.append(fullTitle, description);
+  screenshots.append(screenTitle, contScreen);
+  video.append(vidTitle, contVid);
+  content.append(shortDesc, full, screenshots, video, file);
+  frag.append(content);
+  return frag;
+}
 function pagesReload() {
   let urlParsed = parseURL(location.search);
+  if (urlParsed.has("ct")) {
+    let title = document.querySelector(
+      "[data-url='ct=" + urlParsed.get("ct") + "']"
+    ).innerText;
+    if (urlParsed.has("page")) title += " | Страница " + urlParsed.get("page");
+    rnamePage(title);
+  } else if (urlParsed.has("do")) {
+    rnamePage();
+  } else {
+  }
   let curPage = urlParsed.has("page") ? urlParsed.get("page") : 1;
   if (urlParsed.has("ct")) rebCateg();
   let blockPage = document.getElementById("page-js");
@@ -211,7 +322,8 @@ function loadCat(e) {
 function pageLoad(e) {
   e.preventDefault();
   if (this.classList.contains("page_num")) {
-    let title = document.title.split("|") + "Страница " + this.innerText;
+    let title =
+      document.title.split("|")[0] + " | " + "Страница " + this.innerText;
     let state = {
       url: this.getAttribute("data-url"),
       title: title,
@@ -237,14 +349,50 @@ function loadGame(e) {
   rnamePage(title);
   loadNew(tar.getAttribute("data-url"));
 }
+function contentHand(e) {
+  let tar = e.target;
+
+  let url = parseURL(location.search);
+  url.delete("page");
+  if (tar.hasAttribute("data-url")) {
+    tar.addEventListener("click", loadGame);
+  }
+}
+function formSearch(e) {
+  e.preventDefault();
+  let form = new FormData(this);
+  let noUi = slideForm.noUiSlider.get();
+  form.append("min", Number(noUi[0]));
+  form.append("max", Number(noUi[1]));
+  let params =
+    "?sort=" +
+    form.get("sort") +
+    "&cat=" +
+    form.get("cat") +
+    "&lang=" +
+    form.get("lang") +
+    "&min=" +
+    form.get("min") +
+    "&max=" +
+    form.get("max");
+  let state = {
+    url: params,
+    title: "Результаты",
+    xPage: window.pageYOffset || document.documentElement.scrollTop,
+  };
+  history.pushState(state, state.title, state.url);
+  rnamePage(state.title);
+  loadNew(params);
+}
 (function () {
   loadNew(location.search);
   document.getElementById("js-load_cat").addEventListener("click", loadCat);
   document
     .getElementById("slider__wrapper")
     .addEventListener("click", loadGame);
-  // document.getElementById("wait_content").addEventListener("click", loadGame);
-  // document.getElementById("content-js").addEventListener("click", contentHand);
+  document.getElementById("wait_content").addEventListener("click", loadGame);
+  document.getElementById("content-js").addEventListener("click", contentHand);
+  document.getElementById("search_grid").addEventListener("submit", formSearch);
 })();
 window.onpopstate = (e) => {
   loadNew(location.search);

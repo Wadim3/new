@@ -134,10 +134,11 @@ header {
   justify-content: space-between;
 }
 .block_content {
-  position: relative;
+  /* position: relative; */
   display: flex;
   flex-flow: row wrap;
   transition: all 0.2s linear;
+  /* z-index: 2; */
 }
 .content_item {
   /* position: relative; */
@@ -430,14 +431,15 @@ header {
   grid-gap: 1vw;
 }
 .pub_year {
-  grid-column-start: 1;
-  grid-column-end: 4;
+  /* grid-column-start: 1; */
+  /* grid-column-end: 4; */
   margin: 15px 0 25px 0;
+  /* padding: 0 10px; */
 }
 .btn_search {
   background-image: url(../asset/search.svg);
   background-color:#0b0e1fb0;
-  grid-column-start: 3;
+  /* grid-column-end: 4; */
   text-align: left;
   width: 50%;
 }
@@ -569,25 +571,26 @@ header {
 }
 .noUi-target {
   position: relative;
+  /* z-index: 1; */
 }
 .noUi-base,
 .noUi-connects {
-  width: 99%;
+  width: 100%;
   height: 100%;
   position: relative;
-  z-index: 1;
+  /* z-index: 0; */
 }
 .noUi-connects {
   overflow: hidden;
-  z-index: 0;
+  /* z-index: 1; */
 }
 .noUi-connect,
 .noUi-origin {
   will-change: transform;
   position: absolute;
   z-index: 1;
-  top: 0;
-  right: 0;
+  top: 0px;
+  right: 5px;
   -ms-transform-origin: 0 0;
   -webkit-transform-origin: 0 0;
   -webkit-transform-style: preserve-3d;
@@ -599,10 +602,10 @@ header {
   width: 100%;
 }
 .noUi-origin {
-  width: 10%;
+  width: 9.95%;
 }
 .noUi-origin {
-  height: 0;
+  height: 0px;
 }
 .noUi-handle {
   -webkit-backface-visibility: hidden;
@@ -625,21 +628,26 @@ header {
   height: 12px;
 }
 .noUi-horizontal .noUi-handle {
-  width: 25px;
+  width: 23px;
   height: 23px;
-  right: -17px;
+  right: -18px;
   top: -6px;
 }
 .noUi-target {
   background: #232338;
   border-radius: 4px;
   border: 1px solid #28282b;
+  /* z-index: 34; */
+  /* position: relative; */
+  /* width: 99%; */
 }
 .noUi-connects {
   border-radius: 2px;
 }
 .noUi-connect {
   background: #414582;
+  /* position: relative; */
+  /* z-index: 4; */
 }
 .noUi-draggable {
   cursor: ew-resize;
@@ -666,6 +674,7 @@ header {
   font-size: 1rem;
   position: absolute;
   color: #9494c3;
+  z-index: 10;
 }
 .noUi-value {
   position: absolute;
@@ -689,8 +698,8 @@ header {
 .noUi-pips-horizontal {
   padding: 9px 0;
   top: 100%;
-  left: 4px;
-  width: 99.1%;
+  left: 6px;
+  width: 99.5%;
 }
 .noUi-value-horizontal {
   -webkit-transform: translate(-50%, 50%);

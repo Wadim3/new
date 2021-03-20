@@ -86,7 +86,7 @@ opacity:0;
   text-align:center;
   margin:10px;
   font-size:larger;
-  background-color:#13182f;
+  /* background-color:#13182f; */
   padding:10px;
   border:2px solid #111833;
   cursor:pointer;
@@ -98,4 +98,23 @@ opacity:0;
 }
 .select_cat > .cat_link{
   color:inherit;
+}
+.requires_name{
+  color:#3772a3;
+}
+.block-new_slider{
+  padding:0 15px;
+  grid-column-start: 1;
+    grid-column-end: 4;
+}
+.btn_search-right{
+  margin:10px 0;
+  grid-column-end:4;
+  text-align:right;
+}
+.file-in:hover{
+  background-color:#af2828;
+}
+.file-in:hover .file{
+  color:#b6c6d3;
 }

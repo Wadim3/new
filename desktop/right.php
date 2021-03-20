@@ -19,31 +19,33 @@
       </div>
     </div>
     <div class="search">
-      <form id="search_grid" action="" method="GET">
+      <form id="search_grid">
         <select class="search_item select-css first_line_item" name="sort" id="search-sort" size="1">
           <option value="name">По имени</option>
           <option value="date">По дате</option>
-          <option value="rating" selected>По рейтингу</option>
-          <option value="popular">По просмотрам</option>
+          <option value="rati" selected>По рейтингу</option>
+          <option value="popu">По просмотрам</option>
         </select>
-        <select class="search_item select-css first_line_item" name="search-categorie" id="search-cat" size="1">
+        <select class="search_item select-css first_line_item" name="cat" id="search-cat" size="1">
           <option class="opt-cat" value>Категория</option>
           <?
 foreach ($cat as $name) {
-  echo '<option class="opt-cat" value="' . $name[1] . '">' . $name[1] . '</option>';
+  echo '<option class="opt-cat" value="' . $name[0] . '">' . $name[1] . '</option>';
 }
 ?>
         </select>
-        <select class="search_item select-css first_line_item" name="language" id="search-language">
+        <select class="search_item select-css first_line_item" name="lang" id="search-language">
           <option value>Язык Озвучки</option>
-          <option value="russian">Русский</option>
-          <option value="english">Английский</option>
-          <option value="other">Другое</option>
+          <option value="1">Русский</option>
+          <option value="2">Английский</option>
+          <option value="3">Другое</option>
         </select>
 
-        <div id="slider_year" class="pub_year"></div>
+        <div class="block-new_slider">
+          <div id="slider_year" class="pub_year"></div>
+        </div>
 
-        <input class="btn_search" type="submit" value="Поиск" />
+        <div class="btn_search-right"><input class="btn_search" type="submit" value="Поиск" /></div>
       </form>
     </div>
     <div id="content-js" class="block_content">
