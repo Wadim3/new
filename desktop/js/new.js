@@ -14,6 +14,19 @@ function text(response) {
 function parseURL(url) {
   return new URLSearchParams(url);
 }
+function generErr(code, message) {
+  let frag = document.createDocumentFragment(),
+    bl = create("div", "error_cont"),
+    top = create("div", "top-code__error"),
+    codebl = create("div", "code__error"),
+    text = create("div", "text__error");
+  codebl.innerText = code;
+  text.innerHTML = message;
+  top.append(codebl, text);
+  bl.append(top);
+  frag.append(bl);
+  return frag;
+}
 function loadNew(params) {
   let contBlock = document.getElementById("content-js");
   // if (sessionStorage.getItem(params) !== null) {
@@ -37,7 +50,15 @@ function loadNew(params) {
       console.log(res);
     })
     .catch((error) => {
-      noticeAll("Код ошибки:" + error, 1);
+      let errArr = {
+        404: "Хмм...Похоже здесь ничего нет",
+        503: "Сервер временно недоступен",
+      };
+      if (errArr[error.message]) {
+        contBlock.innerHTML = "";
+        contBlock.append(generErr(error.message, errArr[error.message]));
+      }
+      noticeAll("Код ошибки: " + error.message, 1);
       console.error(error);
     });
 }
@@ -47,8 +68,6 @@ function generHand(res, par, bl) {
   if (url.has("ct")) {
     bl.append(generCont(json));
   } else if (url.has("art")) {
-    console.log(json[0]);
-    window.testVar = json[0];
     bl.append(generArt(json));
   } else {
     bl.append(generCont(json));
@@ -133,8 +152,8 @@ function generArt(json) {
     contVid = create("div", "content-video"),
     file = create("div", "cont__block file-block"),
     thisjson = json[0],
-    media = JSON.parse(thisjson[3]),
-    specify = JSON.parse(thisjson[2]),
+    media = thisjson[3] ? JSON.parse(thisjson[3]) : "",
+    specify = thisjson[2] ? JSON.parse(thisjson[2]) : "",
     torrent = thisjson[4] ? JSON.parse(thisjson[4]) : "";
   img.src = thisjson[6];
   img.alt = thisjson[5];
@@ -205,17 +224,24 @@ function generArt(json) {
 }
 function pagesReload() {
   let urlParsed = parseURL(location.search);
+  let pageStr = "",
+    pages = false;
+  if (urlParsed.has("page")) {
+    pageStr = " | Страница " + urlParsed.get("page");
+    pages = urlParsed.get("page");
+    urlParsed.delete("page");
+  }
   if (urlParsed.has("ct")) {
     let title = document.querySelector(
       "[data-url='ct=" + urlParsed.get("ct") + "']"
     ).innerText;
-    if (urlParsed.has("page")) title += " | Страница " + urlParsed.get("page");
-    rnamePage(title);
+    rnamePage(title + pageStr);
   } else if (urlParsed.has("do")) {
     rnamePage();
-  } else {
+  } else if (urlParsed.toString() == "") {
+    rnamePage("Все игры" + pageStr);
   }
-  let curPage = urlParsed.has("page") ? urlParsed.get("page") : 1;
+  let curPage = pages ? pages : 1;
   if (urlParsed.has("ct")) rebCateg();
   let blockPage = document.getElementById("page-js");
   blockPage.innerHTML = "";
@@ -224,7 +250,10 @@ function pagesReload() {
     .then(json)
     .then((resJson) => {
       console.log(resJson);
-      if (resJson.count == 1) return;
+      if (urlParsed.has("sort") || urlParsed.has("search")) {
+        rnamePage("Результатов: " + resJson.all + pageStr);
+      }
+      if (resJson.count <= 1) return;
       let allPage = resJson.count;
       let frag = document.createDocumentFragment();
       let link = create("a");
@@ -263,6 +292,31 @@ function pagesReload() {
       noticeAll("Код ошибки:" + error, 1);
       console.error(error);
     });
+}
+function generCompl(json) {
+  let auto = document.getElementById("autocomplete");
+  auto.innerHTML = "";
+  let frag = document.createDocumentFragment();
+  for (const key in json) {
+    if (Object.hasOwnProperty.call(json, key)) {
+      const el = json[key];
+      let item = create("div", "auto-item");
+      let fil = create("span", "fil_span");
+      fil.setAttribute("data-url", "?art=" + el[0]);
+      fil.addEventListener("click", loadGame);
+      let left = create("div", "auto-left");
+      let img = create("img", "auto-img");
+      img.src = el[2];
+      left.append(img);
+      let right = create("div", "auto-right");
+      let name = create("span", "auto-name");
+      name.innerText = el[1];
+      right.append(name);
+      item.append(fil, left, right);
+      frag.append(item);
+    }
+  }
+  auto.append(frag);
 }
 function noticeAll(text, type = 0) {
   let arrNotice = [
@@ -315,7 +369,7 @@ function loadCat(e) {
     xPage: window.pageYOffset || document.documentElement.scrollTop,
   };
   history.pushState(state, state.title, state.url);
-  rnamePage(tar.innerText);
+  // rnamePage(tar.innerText);
 
   loadNew("?" + tar.getAttribute("data-url"));
 }
@@ -331,7 +385,7 @@ function pageLoad(e) {
     };
     history.pushState(state, state.title, state.url);
     document.getElementById("rename_page-js").scrollIntoView();
-    rnamePage(title);
+    // rnamePage(title);
     loadNew(this.getAttribute("data-url"));
   }
 }
@@ -346,12 +400,11 @@ function loadGame(e) {
   };
   history.pushState(state, state.title, state.url);
   document.getElementById("rename_page-js").scrollIntoView();
-  rnamePage(title);
+  // rnamePage(title);
   loadNew(tar.getAttribute("data-url"));
 }
 function contentHand(e) {
   let tar = e.target;
-
   let url = parseURL(location.search);
   url.delete("page");
   if (tar.hasAttribute("data-url")) {
@@ -381,8 +434,57 @@ function formSearch(e) {
     xPage: window.pageYOffset || document.documentElement.scrollTop,
   };
   history.pushState(state, state.title, state.url);
-  rnamePage(state.title);
+  // rnamePage(state.title);
   loadNew(params);
+}
+function searchWord(e) {
+  e.preventDefault();
+  let params = "?search=" + document.getElementById("string").value;
+  let state = {
+    url: params,
+    title: "Результаты",
+    xPage: window.pageYOffset || document.documentElement.scrollTop,
+  };
+  history.pushState(state, state.title, state.url);
+  // rnamePage(state.title);
+  loadNew(params);
+}
+function autoComplete(e) {
+  if (!this.value.length > 3) return;
+  if (window.timer) {
+    clearTimeout(timer);
+  }
+  window.timer = setTimeout(() => {
+    fetch("autocomplete.php?search=" + this.value)
+      .then(fetchHandler)
+      .then(json)
+      .then((res) => {
+        console.log(res);
+        generCompl(res);
+      })
+      .catch((error) => {
+        console.log(error);
+        noticeAll("Код ошибки: " + error.message, 1);
+      });
+  }, 1000);
+}
+function focusAutoCompl(e) {
+  let auto = document.getElementById("autocomplete");
+  auto.style.visibility = "visible";
+  auto.classList.add("auto-active");
+  this.addEventListener(
+    "blur",
+    (e) =>
+      setTimeout(() => {
+        auto.classList.remove("auto-active");
+        auto.addEventListener(
+          "transitionend",
+          () => (auto.style.visibility = "hidden"),
+          { once: true }
+        );
+      }, 300),
+    { once: true }
+  );
 }
 (function () {
   loadNew(location.search);
@@ -393,6 +495,12 @@ function formSearch(e) {
   document.getElementById("wait_content").addEventListener("click", loadGame);
   document.getElementById("content-js").addEventListener("click", contentHand);
   document.getElementById("search_grid").addEventListener("submit", formSearch);
+  document
+    .getElementById("search_string")
+    .addEventListener("submit", searchWord);
+  document.getElementById("string").addEventListener("input", autoComplete);
+  document.getElementById("string").addEventListener("focus", focusAutoCompl);
+  // document.
 })();
 window.onpopstate = (e) => {
   loadNew(location.search);
