@@ -1,3 +1,5 @@
+var favIcon =
+  " onclick='favoritSet(this)' class='fav_set-pict dislike' version='1.1' id='favorit-svg' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 412.735 412.735' style='enable-background:new 0 0 412.735 412.735;' xml:space='preserve'><path id='favorit-path' class='review_path' d='M295.706,46.058C354.45,46.344,402,93.894,402.286,152.638 c0,107.624-195.918,214.204-195.918,214.204S10.449,258.695,10.449,152.638c0-58.862,47.717-106.58,106.58-106.58l0,0 c36.032-0.281,69.718,17.842,89.339,48.065C226.123,64.047,259.722,45.971,295.706,46.058z'></path><path id='svg-like' class='favoth__path' d='M206.367,377.291c-1.854-0.024-3.664-0.567-5.224-1.567C193.306,371.544,0,263.397,0,152.638 C0,88.005,52.395,35.609,117.029,35.609l0,0c34.477-0.406,67.299,14.757,89.339,41.273 c41.749-49.341,115.591-55.495,164.932-13.746c26.323,22.273,41.484,55.02,41.436,89.501 c0,112.327-193.306,218.906-201.143,223.086C210.031,376.723,208.221,377.266,206.367,377.291z M117.029,56.507 c-53.091,0-96.131,43.039-96.131,96.131l0,0c0,89.861,155.167,184.424,185.469,202.188 c30.302-17.241,185.469-111.282,185.469-202.188c0.087-53.091-42.881-96.201-95.972-96.289 c-32.501-0.053-62.829,16.319-80.615,43.521c-3.557,4.905-10.418,5.998-15.323,2.44c-0.937-0.68-1.761-1.503-2.44-2.44 C179.967,72.479,149.541,56.08,117.029,56.507z'></path></svg>";
 !(function (e, t) {
   "object" == typeof exports && "undefined" != typeof module
     ? (module.exports = t())
@@ -201,8 +203,7 @@ function generCont(json) {
       desc = create("div", "description"),
       filSpan = create("span", "fil_span"),
       favSet = create("div", "fav_set-block");
-    favSet.innerHTML =
-      "<svg onclick='favoritSet(this)' class='fav_set-pict dislike' version='1.1' id='favorit-svg' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 412.735 412.735' style='enable-background:new 0 0 412.735 412.735;' xml:space='preserve'><path id='favorit-path' class='review_path' d='M295.706,46.058C354.45,46.344,402,93.894,402.286,152.638 c0,107.624-195.918,214.204-195.918,214.204S10.449,258.695,10.449,152.638c0-58.862,47.717-106.58,106.58-106.58l0,0 c36.032-0.281,69.718,17.842,89.339,48.065C226.123,64.047,259.722,45.971,295.706,46.058z'></path><path id='svg-like' class='favoth__path' d='M206.367,377.291c-1.854-0.024-3.664-0.567-5.224-1.567C193.306,371.544,0,263.397,0,152.638 C0,88.005,52.395,35.609,117.029,35.609l0,0c34.477-0.406,67.299,14.757,89.339,41.273 c41.749-49.341,115.591-55.495,164.932-13.746c26.323,22.273,41.484,55.02,41.436,89.501 c0,112.327-193.306,218.906-201.143,223.086C210.031,376.723,208.221,377.266,206.367,377.291z M117.029,56.507 c-53.091,0-96.131,43.039-96.131,96.131l0,0c0,89.861,155.167,184.424,185.469,202.188 c30.302-17.241,185.469-111.282,185.469-202.188c0.087-53.091-42.881-96.201-95.972-96.289 c-32.501-0.053-62.829,16.319-80.615,43.521c-3.557,4.905-10.418,5.998-15.323,2.44c-0.937-0.68-1.761-1.503-2.44-2.44 C179.967,72.479,149.541,56.08,117.029,56.507z'></path></svg>";
+    favSet.innerHTML = "<svg " + favIcon;
     imgItem.src = json[key][5];
     imgItem.alt = json[key][1];
     imgItem.onerror = function () {
@@ -290,6 +291,7 @@ function generProfile(json) {
   return frag;
 }
 function generArt(json) {
+  window.json = json;
   let frag = document.createDocumentFragment(),
     content = create("div", "block-art"),
     shortDesc = create("div", "cont__block short__desc"),
@@ -307,6 +309,7 @@ function generArt(json) {
     vidTitle = create("div", "title_block"),
     contVid = create("div", "content-video"),
     file = create("div", "cont__block file-block"),
+    fav = create("div", "fav_set-block"),
     thisjson = json[0],
     media = thisjson[3] ? JSON.parse(thisjson[3]) : "",
     specify = thisjson[2] ? JSON.parse(thisjson[2]) : "",
@@ -317,6 +320,7 @@ function generArt(json) {
   fullTitle.innerText = "Описание:";
   description.innerHTML = thisjson[1];
   screenTitle.innerText = "Скриншоты:";
+  fav.innerHTML = "<svg data-url='?art=" + thisjson[0] + "'" + favIcon;
   vidTitle.innerText = "Видео:";
   for (const key in specify) {
     if (Object.hasOwnProperty.call(specify, key)) {
@@ -373,7 +377,7 @@ function generArt(json) {
   }
   sessionStorage.removeItem("image");
   sessionStorage.removeItem("title");
-  left.append(img);
+  left.append(img, fav);
   right.append(requires);
   shortDesc.append(left, right);
   full.append(fullTitle, description);
@@ -525,13 +529,17 @@ function noticeAll(text, type = 0) {
   stat.append(img, textStat);
   hr.className = "hr";
   textElem.className = "text_notice";
-  textElem.innerText = text;
+  textElem.innerHTML = text;
   block.append(stat, hr, textElem);
   frag.append(block);
   document.getElementById("notice-all").appendChild(frag);
+  let height = block.clientHeight + 6;
+  block.style.height = 0;
   setTimeout(() => {
     block.classList.remove("temp");
+    block.style.height = height + "px";
   }, 100);
+
   setTimeout(() => {
     block.classList.add("temp");
   }, 3500);
@@ -791,6 +799,7 @@ function exitProfile(e) {
       console.error(err);
     });
 }
+
 (function () {
   loadNew(location.search);
   document.getElementById("js-load_cat").addEventListener("click", loadCat);
@@ -820,21 +829,36 @@ window.onpopstate = (e) => {
   window.scrollTo(0, history.state.xPage);
 };
 function favoritSet(tar) {
-  fetch("favorit.php", {
-    method: "post",
-    body: parseURL(location.search),
-  })
+  let art = tar.hasAttribute("data-url")
+    ? tar.getAttribute("data-url")
+    : tar.parentNode.previousElementSibling.getAttribute("data-url");
+  let nameGame = tar.hasAttribute("data-url")
+    ? tar.parentNode.previousElementSibling.alt
+    : tar.parentNode.nextElementSibling.alt;
+  fetch("favorit.php" + art)
     .then(fetchHandler)
     .then(text)
     .then((res) => {
-      let favIcon = document.getElementById("favorit-svg");
-      let blockres = document.getElementById("favorit-res_json");
-      if (blockres.classList.contains("INSERT")) {
-        favIcon.classList.remove("dislike");
-        favIcon.classList.add("like");
-      } else if (blockres.classList.contains("DELETE")) {
-        favIcon.classList.add("dislike");
-        favIcon.classList.remove("like");
+      res = JSON.parse(res);
+      if (res.act) {
+        tar.classList.remove("dislike");
+        tar.classList.add("like");
+        noticeAll(
+          "<span class='temp-fav'> " +
+            nameGame +
+            "<br><span class='commd-text'>Добавлено в избранное</span></span>"
+        );
+      } else {
+        tar.classList.add("dislike");
+        tar.classList.remove("like");
+        noticeAll(
+          "<span class='temp-fav'> " +
+            nameGame +
+            "<br><span class='commd-text'>Удалено из избранного</span></span>"
+        );
       }
+    })
+    .catch((err) => {
+      noticeAll("Код ошибки: " + err.message, 1);
     });
 }

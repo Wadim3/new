@@ -1,7 +1,32 @@
 <?
 require_once "connection.php";
 if (!empty($_GET['art'])) {
-  $request = "SELECT `fulldescip`.*,`game`.`name`, `game`.`image`  FROM `fulldescip`, `game` WHERE `game`.`game_id`=`fulldescip`.`game_id` AND `fulldescip`.`game_id`=" . (int) $_GET['art'];
+  $art = (int) $_GET['art'];
+  $cook = $_COOKIE['hash'];
+  $_SESSION['this_game'] = $art;
+  $verifyReq = "SELECT `views_id` FROM `views` WHERE DATEDIFF(CURRENT_DATE, `date`) < 2 AND `game_id`= {$art} AND `hash`='{$cook}'";
+  $verifRes = $mysqli->query($verifyReq);
+  if (!$verifRes->num_rows) {
+    if ($_SESSION['auth_flag']) {
+      $request = "SELECT `user_view_id` FROM `user_views` WHERE `game_id`= {$art} AND `user_id` = {$_SESSION['user_id']}";
+      $res = $mysqli->query($request);
+      if (!$res->num_rows) {
+        $reqViews = "INSERT INTO `views`(`views_id`, `game_id`, `hash`, `date`) VALUES (NULL, {$art},'{$cook}',current_timestamp()); INSERT INTO `user_views`(`user_view_id`, `game_id`, `user_id`, `date`, `hash`) VALUES (NULL, {$art}, {$_SESSION['user_id']}, current_timestamp(), '{$cook}');UPDATE `game` SET `views`= `views`+1 WHERE `game_id` = {$art};";
+      } else {
+        $reqViews = "INSERT INTO `views`(`views_id`, `game_id`, `hash`, `date`) VALUES (NULL, {$art},'{$cook}',current_timestamp()); UPDATE `user_views` SET `date`=current_timestamp() WHERE `game_id` = {$art} AND `user_id` = {$_SESSION['user_id']}";
+      }
+    } else {
+      $reqViews = "INSERT INTO `views`(`views_id`, `game_id`, `hash`, `date`) VALUES (NULL, {$art},'{$cook}',current_timestamp()); UPDATE `game` SET `views`= `views`+1 WHERE `game_id` = {$art};";
+    }
+    if ($mysqli->multi_query($reqViews)) {
+      do {
+        if ($result = $mysqli->store_result()) {
+          $result->free();
+        }
+      } while ($mysqli->more_results() && $mysqli->next_result());
+    }
+  }
+  $request = "SELECT `fulldescip`.*,`game`.`name`, `game`.`image`  FROM `fulldescip`, `game` WHERE `game`.`game_id`=`fulldescip`.`game_id` AND `fulldescip`.`game_id`=" . $art;
   $res = $mysqli->query($request);
   echo json_encode($res->fetch_all(), JSON_UNESCAPED_UNICODE);
 }
