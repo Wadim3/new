@@ -46,5 +46,6 @@
 </footer>
 <div id="notice-all">
 </div>
+<script src="js/baguetteBox.min.js"></script>
 <script src="js/script.min.js"></script>
 <script src="js/new.js"></script>

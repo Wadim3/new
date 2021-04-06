@@ -76,6 +76,7 @@ foreach ($lang as $key => $value) {
           <div class="btn_search-right"><input class="btn_search" type="submit" value="Поиск" /></div>
         </form>
       </div>
+
       <div id="content-js" class="block_content">
       </div>
     </div>

@@ -265,6 +265,7 @@ header {
   align-items:center;
   position: relative;
   overflow: hidden;
+  padding: 8px;
   width: 20%;
   text-align: center;
 }
@@ -286,7 +287,7 @@ header {
   display: none;
 }
 .table_content .img_item {
-  width: 95%;
+  width: 99%;
   height:283px;
 }
 .table_content .name_game {
@@ -307,6 +308,7 @@ header {
   background-color: var(--cont-bg-color);
   align-items: center;
   padding: 0 20px;
+  /* margin: 20px 0; */
 }
 .slider {
   width: 97%;

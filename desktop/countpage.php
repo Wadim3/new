@@ -22,6 +22,7 @@ if (isset($_GET['ct'])) {
   $arrPage['count'] = 1;
 } elseif (isset($_GET['do'])) {
   $arrPage['count'] = 1;
+  $arrPage['all'] = 0;
 } elseif (isset($_GET["sort"])) {
   $request = "SELECT COUNT(DISTINCT `game`.`game_id`) AS 'count' FROM `game` LEFT JOIN `cat_game` ON `cat_game`.`game_id` = `game`.`game_id` LEFT JOIN `fulldescip` ON `fulldescip`.`game_id` = `game`.`game_id` LEFT JOIN `avg_rating` ON `avg_rating`.`game_id` = `game`.`game_id` LEFT JOIN `lang` ON `lang`.`game_id` = `game`.`game_id` WHERE YEAR(`game`.`date`) >= " . (int) $_GET["min"] . " AND YEAR(`game`.`date`) <= " . (int) $_GET["max"];
   if (!empty($_GET["cat"])) {
@@ -40,4 +41,5 @@ if (isset($_GET['ct'])) {
   $result = $res->fetch_assoc();
   $arrPage['count'] = calcPage($result['count']);
 }
+header('Content-Type: application/json');
 echo json_encode($arrPage);

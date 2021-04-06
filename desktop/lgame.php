@@ -10,18 +10,7 @@ function getSort($sqlreq)
   $sortAr = array('n' => 'name', 'd' => 'pubdate', 'v' => 'views');
   return $sqlreq .= " ORDER BY `" . $sortAr[$x] . "` " . $y;
 }
-function getPage($sqlreq)
-{
-  $num_page = 0;
-  global $gamePerPage;
-  if (isset($_GET['page'])) {
-    $num_page = (int) $_GET['page'] - 1 <= -1 ? 0 : (int) $_GET['page'] - 1;
-  }
-  if (isset($_GET['s'])) {
-    $sqlreq = getSort($sqlreq);
-  }
-  return $sqlreq .= " LIMIT " . $num_page * $gamePerPage . "," . $gamePerPage . ";";
-}
+
 if (isset($_GET['art'])) {
   require_once "art.php";
 } elseif (isset($_GET['ct'])) {
@@ -60,6 +49,8 @@ if (isset($_GET['art'])) {
     http_response_code(404);
   }
   echo json_encode($game->fetch_all(), JSON_UNESCAPED_UNICODE);
+} elseif (isset($_GET['do'])) {
+  require_once "doing.php";
 } else {
   $getGame = getPage("SELECT `game`.*, `avg`, SUBSTRING_INDEX(`description`,' ',40) AS 'desc', JSON_UNQUOTE(JSON_EXTRACT(`specification_json`, '$.Жанр')) AS 'genre' FROM `game`, `avg_rating`, `fulldescip` WHERE `avg_rating`.`game_id` = `game`.`game_id` AND `fulldescip`.`game_id` = `game`.`game_id`");
   $game = $mysqli->query($getGame);

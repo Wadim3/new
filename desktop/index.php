@@ -1,4 +1,11 @@
-<?require_once "connection.php";?>
+<?require_once "connection.php";
+if ($_GET['do'] == "profile" && !$_SESSION['auth_flag']) {
+  $new_url = "/desktop/";
+  header('Location: ' . $new_url);
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -11,7 +18,6 @@
   <?require_once "header.php"?>
   <?require_once "main.php"?>
   <?require_once "footer.php";?>
-  <?require "authenfication.php"?>
 </body>
 
 </html>

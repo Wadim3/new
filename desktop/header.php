@@ -4,7 +4,7 @@
       <img class="icon_site" src="asset/hotpng.com.png" alt="mySite" />
       <div class="str_search">
         <form id="search_string">
-          <input id="string" name="search" type="text" value="<?echo htmlspecialchars($_GET['search']) ?>"
+          <input id="string" name="search" type="search" value="<?echo htmlspecialchars($_GET['search']) ?>"
             placeholder="Искать здесь..." autocomplete="off" />
           <button id="btn_string" type="submit">
             <svg class="search_icon" fill="#bd2c2c" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="20px"
@@ -14,45 +14,48 @@
             </svg>
           </button>
           <div id="autocomplete" class="auto-hidden" style="visibility:hidden;">
-            <div class="auto-item">
-              <span class="fil_span" data-url="?art=4"></span>
-              <div class="auto-left">
-                <img src="https://s1.torrents-igruha.org/uploads/posts/2019-06/1560267004__cover.jpg" alt=""
-                  class="auto-img">
-              </div>
-              <div class="auto-right">
-                <span class="auto-name">Watch Dogs Legion
-                </span>
-              </div>
-            </div>
+
           </div>
         </form>
       </div>
-      <div class="for_user">
-        <div class="menu-for"><img tabindex="-1" src="asset/user.svg" alt="" class="img-user"></div>
+      <div id="user-hand-js" class="for_user">
+        <div class="menu-for"><img id="img_user-js" src="<?echo $_SESSION['auth_flag'] ? $_SESSION['picture'] : "
+            asset/user.svg"; ?>" class="img-user
+          <?echo $_SESSION['auth_flag'] ? " login-true" : ""; ?>">
+        </div>
         <div class="for-reg_login">
           <div class="top_menu-user">
-            <span id="login__menu" class="tit-user_menu">Войти</span>
+            <span id="login__menu" class="tit-user_menu active-tit">Войти</span>
             <span id="register__menu" class="tit-user_menu">Регистрация</span>
           </div>
           <div class="block-us_menu">
-            <div class="register">
-              <form class="form-for-reg" action="" id="register">
-                <input placeholder="Никнейм" class="input-user" type="text" name="nick" id="rnick">
-                <input placeholder="Email" class="input-user" type="email" name="mail" id="email">
+            <div class="register block-cont">
+              <form class="form-for-reg" id="register">
+                <input autocomplete="username" placeholder="Никнейм" class="input-user" type="text" name="nick"
+                  id="rnick">
+                <input autocomplete="email" placeholder="Email" class="input-user" type="email" name="mail" id="email">
                 <div class="block-pass">
-                  <input placeholder="Пароль" class="input-user" type="password" name="pass" id="rpass">
-                  <label class="check-lab"><input type="checkbox" class="pass-check"> Показать пароль</label>
+                  <input autocomplete="new-password" placeholder="Пароль" class="input-user" type="password"
+                    name="rpass" id="rpass">
+                  <label onclick="showPass(this)" class="check-lab off"><input name="vsp" type="checkbox"
+                      class="pass-check">
+                    Показать
+                    пароль</label>
                 </div>
                 <input class="input-user" type="submit" value="Регистрация">
               </form>
             </div>
-            <div class="login" style="display:none;">
-              <form class="form-for-reg" action="" id="login">
-                <input class="input-user" type="text" name="nick" id="lnick">
+            <div class="login block-cont active-menu">
+              <form class="form-for-reg" id="login">
+                <input autocomplete="username" placeholder="Никнейм" class="input-user" type="text" name="nick"
+                  id="lnick">
                 <div class="block-pass">
-                  <input class="input-user" type="password" name="pass" id="lpass">
-                  <label class="check-lab"><input type="checkbox" class="pass-check"> Показать пароль</label>
+                  <input autocomplete="current-password" placeholder="Пароль" class="input-user" type="password"
+                    name="lpass" id="lpass">
+                  <label onclick="showPass(this)" class="check-lab off"><input name="vsp" type="checkbox"
+                      class="pass-check">
+                    Показать
+                    пароль</label>
                 </div>
                 <input class="input-user" type="submit" value="Войти">
               </form>
@@ -60,8 +63,18 @@
           </div>
         </div>
         <div class="user_authorized">
+          <div class="top-user menu-user_prof">
+            <span class="user-nickname" id="usnick">
+              <?echo $_SESSION['user_name'] ?>
+            </span>
+          </div>
+          <div class="menu-user_profile menu-user_prof">
+            <span class="link-for-prof" id="profile-link"><img src="asset/user.svg" class="svg-link"></span>
+            <span class="link-for-prof" id="exit-link"><img src="asset/exit-account.svg" class="svg-link"></span>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </header>
+<!-- Правка при обновлении страницы -->

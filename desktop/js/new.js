@@ -1,3 +1,93 @@
+!(function (e, t) {
+  "object" == typeof exports && "undefined" != typeof module
+    ? (module.exports = t())
+    : "function" == typeof define && define.amd
+    ? define(t)
+    : ((e = e || self),
+      (function () {
+        var n = e.Cookies,
+          r = (e.Cookies = t());
+        r.noConflict = function () {
+          return (e.Cookies = n), r;
+        };
+      })());
+})(this, function () {
+  "use strict";
+  function e(e) {
+    for (var t = 1; t < arguments.length; t++) {
+      var n = arguments[t];
+      for (var r in n) e[r] = n[r];
+    }
+    return e;
+  }
+  var t = {
+    read: function (e) {
+      return e.replace(/(%[\dA-F]{2})+/gi, decodeURIComponent);
+    },
+    write: function (e) {
+      return encodeURIComponent(e).replace(
+        /%(2[346BF]|3[AC-F]|40|5[BDE]|60|7[BCD])/g,
+        decodeURIComponent
+      );
+    },
+  };
+  return (function n(r, o) {
+    function i(t, n, i) {
+      if ("undefined" != typeof document) {
+        "number" == typeof (i = e({}, o, i)).expires &&
+          (i.expires = new Date(Date.now() + 864e5 * i.expires)),
+          i.expires && (i.expires = i.expires.toUTCString()),
+          (t = encodeURIComponent(t)
+            .replace(/%(2[346B]|5E|60|7C)/g, decodeURIComponent)
+            .replace(/[()]/g, escape)),
+          (n = r.write(n, t));
+        var c = "";
+        for (var u in i)
+          i[u] &&
+            ((c += "; " + u), !0 !== i[u] && (c += "=" + i[u].split(";")[0]));
+        return (document.cookie = t + "=" + n + c);
+      }
+    }
+    return Object.create(
+      {
+        set: i,
+        get: function (e) {
+          if ("undefined" != typeof document && (!arguments.length || e)) {
+            for (
+              var n = document.cookie ? document.cookie.split("; ") : [],
+                o = {},
+                i = 0;
+              i < n.length;
+              i++
+            ) {
+              var c = n[i].split("="),
+                u = c.slice(1).join("=");
+              '"' === u[0] && (u = u.slice(1, -1));
+              try {
+                var f = t.read(c[0]);
+                if (((o[f] = r.read(u, f)), e === f)) break;
+              } catch (e) {}
+            }
+            return e ? o[e] : o;
+          }
+        },
+        remove: function (t, n) {
+          i(t, "", e({}, n, { expires: -1 }));
+        },
+        withAttributes: function (t) {
+          return n(this.converter, e({}, this.attributes, t));
+        },
+        withConverter: function (t) {
+          return n(e({}, this.converter, t), this.attributes);
+        },
+      },
+      {
+        attributes: { value: Object.freeze(o) },
+        converter: { value: Object.freeze(r) },
+      }
+    );
+  })(t, { path: "/" });
+});
 function fetchHandler(res) {
   if (res.ok) {
     return Promise.resolve(res);
@@ -31,9 +121,8 @@ function loadNew(params) {
   let contBlock = document.getElementById("content-js");
   // if (sessionStorage.getItem(params) !== null) {
   //   contBlock.innerHTML = "";
-  //   generHand(sessionStorage.getItem(params));
+  //   generHand(sessionStorage.getItem(params), params, contBlock);
   //   pagesReload();
-  //   console.info("add localstorage1234");
   //   return;
   // }
   fetch("lgame.php" + params)
@@ -41,13 +130,11 @@ function loadNew(params) {
     .then(text)
     .then((res) => {
       contBlock.innerHTML = "";
-      if (sessionStorage.getItem(params) === null) {
-        sessionStorage.setItem(params, res);
-        console.info("add localstorage 1 ");
-      }
+      // if (sessionStorage.getItem(params) === null) {
+      //   sessionStorage.setItem(params, res);
+      // }
       generHand(res, params, contBlock);
       pagesReload();
-      console.log(res);
     })
     .catch((error) => {
       let errArr = {
@@ -69,6 +156,14 @@ function generHand(res, par, bl) {
     bl.append(generCont(json));
   } else if (url.has("art")) {
     bl.append(generArt(json));
+    baguetteBox.run(".content-screenshot");
+  } else if (url.has("do")) {
+    if (url.get("do") == "profile") {
+      bl.append(generProfile(json));
+      loadUlist("favorites", 1);
+      loadUlist("views", 1);
+      loadUlist("download", 1);
+    }
   } else {
     bl.append(generCont(json));
   }
@@ -104,7 +199,10 @@ function generCont(json) {
       down = create("div", "down_link"),
       nameGame = create("div", "name_game"),
       desc = create("div", "description"),
-      filSpan = create("span", "fil_span");
+      filSpan = create("span", "fil_span"),
+      favSet = create("div", "fav_set-block");
+    favSet.innerHTML =
+      "<svg onclick='favoritSet(this)' class='fav_set-pict dislike' version='1.1' id='favorit-svg' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 412.735 412.735' style='enable-background:new 0 0 412.735 412.735;' xml:space='preserve'><path id='favorit-path' class='review_path' d='M295.706,46.058C354.45,46.344,402,93.894,402.286,152.638 c0,107.624-195.918,214.204-195.918,214.204S10.449,258.695,10.449,152.638c0-58.862,47.717-106.58,106.58-106.58l0,0 c36.032-0.281,69.718,17.842,89.339,48.065C226.123,64.047,259.722,45.971,295.706,46.058z'></path><path id='svg-like' class='favoth__path' d='M206.367,377.291c-1.854-0.024-3.664-0.567-5.224-1.567C193.306,371.544,0,263.397,0,152.638 C0,88.005,52.395,35.609,117.029,35.609l0,0c34.477-0.406,67.299,14.757,89.339,41.273 c41.749-49.341,115.591-55.495,164.932-13.746c26.323,22.273,41.484,55.02,41.436,89.501 c0,112.327-193.306,218.906-201.143,223.086C210.031,376.723,208.221,377.266,206.367,377.291z M117.029,56.507 c-53.091,0-96.131,43.039-96.131,96.131l0,0c0,89.861,155.167,184.424,185.469,202.188 c30.302-17.241,185.469-111.282,185.469-202.188c0.087-53.091-42.881-96.201-95.972-96.289 c-32.501-0.053-62.829,16.319-80.615,43.521c-3.557,4.905-10.418,5.998-15.323,2.44c-0.937-0.68-1.761-1.503-2.44-2.44 C179.967,72.479,149.541,56.08,117.029,56.507z'></path></svg>";
     imgItem.src = json[key][5];
     imgItem.alt = json[key][1];
     imgItem.onerror = function () {
@@ -112,7 +210,7 @@ function generCont(json) {
     };
     nameGame.innerText = json[key][1];
     filSpan.setAttribute("data-url", "?art=" + json[key][0]);
-    imgBlock.append(filSpan, imgItem, nameGame);
+    imgBlock.append(filSpan, favSet, imgItem, nameGame);
     genre.innerHTML = "Жанр: " + json[key][9];
     views.innerHTML =
       "<svg height='1.2vw' version='1.1' viewBox='0 -25 150 122' width='1.5vw' xmlns='http://www.w3.org/2000/svg'><use xlink:href='#views'></use></svg><span class='view_value'>" +
@@ -131,6 +229,64 @@ function generCont(json) {
     cloneBl.append(imgBlock, info);
     frag.append(cloneBl);
   }
+  return frag;
+}
+function generProfile(json) {
+  console.log(json);
+  let frag = document.createDocumentFragment();
+  let profile = create("div", "profile__page");
+  let top = create("div", "top_profile-page");
+  let left = create("div", "top_user-left");
+  let lblock = create("div", "top_left-block");
+  let img = create("img", "top_left-picture");
+  let stat = json.stat;
+  img.src = json.picture;
+  img.alt = json.nick;
+  lblock.append(img);
+  left.append(lblock);
+  window.json = json;
+  let right = create("div", "top_user-right");
+  let rblock = create("div", "top_right-block");
+  let table = create("table", "user_stat-table");
+  let tr = create("tr", "row-stat");
+  tr.innerHTML =
+    "<td class='name-stat'>Никнейм: </td><td class='value-stat'>" +
+    json.nick +
+    "</td>";
+  table.append(tr);
+  for (const key in stat) {
+    if (Object.hasOwnProperty.call(stat, key)) {
+      const element = stat[key];
+      let tr = create("tr", "row-stat");
+      tr.innerHTML =
+        "<td class='name-stat'>" +
+        key +
+        ": </td><td class='value-stat'>" +
+        element +
+        "</td>";
+      console.log(tr.innerHTML);
+      table.append(tr);
+    }
+  }
+  rblock.append(table);
+  right.append(rblock);
+  top.append(left, right);
+  let bottom = create("div", "bottom_profile-page");
+  let title = create("div", "bott_profile-title");
+  title.innerHTML =
+    "<div data-target='content-favorites' class='title_profile active-title'>Избранное</div><div data-target='content-download' class='title_profile'>Загрузки</div><div data-target='content-views' class='title_profile'>История</div>";
+  title.addEventListener("click", handUser);
+  let content = create("div", "bott_profile-content");
+  let favorites = create("div", "bott_content-item act_user-menu");
+  favorites.id = "content-favorites";
+  let views = create("div", "bott_content-item");
+  views.id = "content-views";
+  let download = create("div", "bott_content-item");
+  download.id = "content-download";
+  content.append(favorites, views, download);
+  bottom.append(title, content);
+  profile.append(top, bottom);
+  frag.append(profile);
   return frag;
 }
 function generArt(json) {
@@ -178,9 +334,14 @@ function generArt(json) {
     if (Object.hasOwnProperty.call(media.screenshot, key)) {
       const element = media.screenshot[key];
       let screenItem = create("img", "screenshot-item");
+      let link = create("a");
+      console.log(element);
+      link.href = element.replace("thumbs/", "");
+      link.setAttribute("data-caption", thisjson[5]);
       screenItem.src = element;
-      screenItem.alt = sessionStorage.getItem("title");
-      contScreen.append(screenItem);
+      screenItem.alt = key + " Скриншот";
+      link.append(screenItem);
+      contScreen.append(link);
     }
   }
   for (const key in media.video) {
@@ -191,7 +352,7 @@ function generArt(json) {
       youtBlock.style.backgroundImage =
         "url(https://i.ytimg.com/vi/" + element + "/mqdefault.jpg)";
       youtBlock.innerHTML =
-        "<div class='filter'></div><div class='yo_icon'><img class='play_icon' src='asset/play__icons.svg'></div>";
+        "<div class='filter'></div><div class='yo_icon'><img onclick='loadYoutube(this)' class='play_icon' src='asset/play__icons.svg'></div>";
       contVid.append(youtBlock);
     }
   }
@@ -237,7 +398,7 @@ function pagesReload() {
     ).innerText;
     rnamePage(title + pageStr);
   } else if (urlParsed.has("do")) {
-    rnamePage();
+    rnamePage("");
   } else if (urlParsed.toString() == "") {
     rnamePage("Все игры" + pageStr);
   }
@@ -245,10 +406,11 @@ function pagesReload() {
   if (urlParsed.has("ct")) rebCateg();
   let blockPage = document.getElementById("page-js");
   blockPage.innerHTML = "";
-  fetch("count_page.php" + location.search)
+  fetch("countpage.php" + location.search)
     .then(fetchHandler)
-    .then(json)
+    .then(text)
     .then((resJson) => {
+      resJson = JSON.parse(resJson);
       console.log(resJson);
       if (urlParsed.has("sort") || urlParsed.has("search")) {
         rnamePage("Результатов: " + resJson.all + pageStr);
@@ -317,6 +479,29 @@ function generCompl(json) {
     }
   }
   auto.append(frag);
+}
+function generList(json) {
+  let frag = document.createDocumentFragment();
+  for (const key in json) {
+    if (Object.hasOwnProperty.call(json, key)) {
+      const element = json[key];
+      let item = create("div", "item_profile-list");
+      let fil = create("span", "fil_span");
+      fil.setAttribute("data-url", "?art=" + element[2]);
+      let pict = create("div", "top-pict_item");
+      let img = create("img", "pict-item");
+      img.src = element[0];
+      img.alt = element[1];
+      pict.append(img);
+      let nameItem = create("div", "down-name_item");
+      let game = create("span", "game-item");
+      game.innerText = element[1];
+      nameItem.append(game);
+      item.append(fil, pict, nameItem);
+      frag.append(item);
+    }
+  }
+  return frag;
 }
 function noticeAll(text, type = 0) {
   let arrNotice = [
@@ -486,6 +671,126 @@ function focusAutoCompl(e) {
     { once: true }
   );
 }
+
+function userMenu(e) {
+  let tar = e.target;
+  if (tar.classList.contains("tit-user_menu")) {
+    document.querySelector(".active-tit").classList.remove("active-tit");
+    tar.classList.add("active-tit");
+    if (tar.id == "login__menu") {
+      document.querySelector(".register").classList.remove("active-menu");
+      document.querySelector(".login").classList.add("active-menu");
+    } else if (tar.id == "register__menu") {
+      document.querySelector(".login").classList.remove("active-menu");
+      document.querySelector(".register").classList.add("active-menu");
+    }
+  }
+}
+function openMenu(e) {
+  let block = this.classList.contains("login-true")
+    ? document.querySelector(".user_authorized")
+    : document.querySelector(".for-reg_login");
+  if (this.classList.contains("img-act-js")) {
+    block.classList.remove("img-active");
+    this.classList.remove("img-act-js");
+  } else {
+    block.classList.add("img-active");
+    this.classList.add("img-act-js");
+  }
+}
+function loadYoutube(elem) {
+  let yout = elem.parentElement.parentElement;
+  let videoId = yout.id;
+  yout.innerHTML =
+    '<iframe class="iframe" id="ytplayer" type="text/html" width="720" height="405" src="https://www.youtube.com/embed/' +
+    videoId +
+    '?autoplay=1&end=180" frameborder="0" allowfullscreen></iframe>';
+}
+function showPass(elem) {
+  let inpPass = elem.previousElementSibling;
+  if (elem.classList.contains("off")) {
+    elem.classList.remove("off");
+    inpPass.type = "text";
+  } else {
+    elem.classList.add("off");
+    inpPass.type = "password";
+  }
+}
+
+function handUser(e) {
+  let tar = e.target;
+  if (!tar.matches(".title_profile:not(.active-title)")) return;
+  this.querySelector(".active-title").classList.remove("active-title");
+  document.querySelector(".act_user-menu").classList.remove("act_user-menu");
+  document
+    .getElementById(tar.getAttribute("data-target"))
+    .classList.add("act_user-menu");
+  tar.classList.add("active-title");
+}
+function sendAuth(e) {
+  e.preventDefault();
+  let form = new FormData(this);
+  fetch("auth.php", { method: "POST", body: form })
+    .then(fetchHandler)
+    .then(json)
+    .then((res) => {
+      console.log(res);
+      let img = document.getElementById("img_user-js");
+      img.click();
+      img.src = res.picture;
+      img.classList.add("login-true");
+      window.location.reload();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+function loadProfile(e) {
+  let name = document.getElementById("usnick");
+  if (!name) return;
+
+  let state = {
+    url: "?do=profile",
+    title: name.innerText,
+    xPage: window.pageYOffset || document.documentElement.scrollTop,
+  };
+  history.pushState(state, state.title, state.url);
+  loadNew("?do=profile");
+}
+function loadUlist(list, page) {
+  fetch("user_list.php?" + list + "=" + page)
+    .then(fetchHandler)
+    .then(text)
+    .then((res) => {
+      let result = JSON.parse(res);
+      console.log(result);
+      let block = document.getElementById("content-" + list);
+      block.append(generList(result));
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+function exitProfile(e) {
+  fetch("exit.php")
+    .then(fetchHandler)
+    .then((res) => {
+      let profile = document.getElementById("img_user-js");
+      Cookies.remove("_uida");
+      Cookies.remove("_uide");
+      profile.classList.remove("login-true");
+
+      profile.src = "asset/user.svg";
+      document.getElementById("usnick").innerText = "";
+      if (location.search == "?do=profile") {
+        location.href = "http://new/desktop";
+      }
+    })
+    .catch((err) => {
+      noticeAll("Код ошибки: " + err.message, 1);
+      console.error(err);
+    });
+}
 (function () {
   loadNew(location.search);
   document.getElementById("js-load_cat").addEventListener("click", loadCat);
@@ -500,10 +805,36 @@ function focusAutoCompl(e) {
     .addEventListener("submit", searchWord);
   document.getElementById("string").addEventListener("input", autoComplete);
   document.getElementById("string").addEventListener("focus", focusAutoCompl);
-  // document.
+  document.getElementById("user-hand-js").addEventListener("click", userMenu);
+  document.getElementById("img_user-js").addEventListener("click", openMenu);
+  document.getElementById("register").addEventListener("submit", sendAuth);
+  document.getElementById("login").addEventListener("submit", sendAuth);
+  document
+    .getElementById("profile-link")
+    .addEventListener("click", loadProfile);
+  document.getElementById("exit-link").addEventListener("click", exitProfile);
 })();
 window.onpopstate = (e) => {
   loadNew(location.search);
   rnamePage(history.state.title);
   window.scrollTo(0, history.state.xPage);
 };
+function favoritSet(tar) {
+  fetch("favorit.php", {
+    method: "post",
+    body: parseURL(location.search),
+  })
+    .then(fetchHandler)
+    .then(text)
+    .then((res) => {
+      let favIcon = document.getElementById("favorit-svg");
+      let blockres = document.getElementById("favorit-res_json");
+      if (blockres.classList.contains("INSERT")) {
+        favIcon.classList.remove("dislike");
+        favIcon.classList.add("like");
+      } else if (blockres.classList.contains("DELETE")) {
+        favIcon.classList.add("dislike");
+        favIcon.classList.remove("like");
+      }
+    });
+}

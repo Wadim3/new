@@ -80,6 +80,18 @@ function userSet($hash, $ip)
   $mysqli->query($req);
   return $mysqli->insert_id;
 }
+function getPage($sqlreq)
+{
+  $num_page = 0;
+  global $gamePerPage;
+  if (isset($_GET['page'])) {
+    $num_page = (int) $_GET['page'] - 1 <= -1 ? 0 : (int) $_GET['page'] - 1;
+  }
+  if (isset($_GET['s'])) {
+    $sqlreq = getSort($sqlreq);
+  }
+  return $sqlreq .= " LIMIT " . $num_page * $gamePerPage . "," . $gamePerPage . ";";
+}
 $hash = createHash($_SERVER['HTTP_USER_AGENT'] . getIp());
 if ($hash_id = userCheck($hash)) {
   // echo $hash;
@@ -89,4 +101,4 @@ if ($hash_id = userCheck($hash)) {
   $_SESSION['hash_id'] = userSet($hash, $_SESSION['ip']);
   setcookie("hash", $hash, time() + 60 * 60 * 24 * 3, '/');
 }
-// require_once "authenfication.php";
+require_once "authenfication.php";

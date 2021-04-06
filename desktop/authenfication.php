@@ -15,7 +15,7 @@ if ($_SESSION['auth_flag']) {
   }
 }
 if (isset($_SESSION['hash']) && !$_SESSION['auth_flag'] || !$_SESSION['user_id'] || !$_SESSION['user_name']) {
-  $request = "SELECT COUNT(DISTINCT `rating`.`game_id`) AS 'rating', COUNT(DISTINCT `user_views`.`game_id`) AS 'views', COUNT(DISTINCT `favorites`.`game_id`) AS 'favorites',`users`.`user_id`,`users`.`about`,`users`.`date`,`users`.`password` AS 'pass',`users`.`nickname` AS 'nick',`users`.`user_id`,`users`.`picture` AS 'pict',`users_session`.`user_agent` AS 'usag',`users_session`.`banned` AS 'bann',`users_session`.`ip` FROM `users_session` LEFT JOIN `users` ON `users`.`user_id` = `users_session`.`user_id` LEFT JOIN `favorites` ON `favorites`.`user_id` = `users_session`.`user_id` LEFT JOIN `user_views` ON `user_views`.`user_id` = `users_session`.`user_id` LEFT JOIN `rating` ON `rating`.`user_id` = `users_session`.`user_id` WHERE `users_session`.`agent_hash` = '" . $_COOKIE["_uida"] . "'";
+  $request = "SELECT COUNT(DISTINCT `load_list`.`game_id`) AS 'download', COUNT(DISTINCT `rating`.`game_id`) AS 'rating', COUNT(DISTINCT `user_views`.`game_id`) AS 'views', COUNT(DISTINCT `favorites`.`game_id`) AS 'favorites', `users`.`user_id`, `users`.`about`, `users`.`date`, `users`.`password` AS 'pass', `users`.`nickname` AS 'nick', `users`.`user_id`, `users`.`picture` AS 'pict', `users_session`.`user_agent` AS 'usag', `users_session`.`banned` AS 'bann', `users_session`.`ip` FROM `users_session` LEFT JOIN `users` ON `users`.`user_id` = `users_session`.`user_id` LEFT JOIN `favorites` ON `favorites`.`user_id` = `users_session`.`user_id` LEFT JOIN `user_views` ON `user_views`.`user_id` = `users_session`.`user_id` LEFT JOIN `rating` ON `rating`.`user_id` = `users_session`.`user_id` LEFT JOIN `load_list` ON `load_list`.`user_id` = `users_session`.`user_id` WHERE `users_session`.`agent_hash` = '" . $_COOKIE["_uida"] . "'";
   $res = $mysqli->query($request);
   if ($res->num_rows) {
     $user = $res->fetch_assoc();
@@ -25,6 +25,7 @@ if (isset($_SESSION['hash']) && !$_SESSION['auth_flag'] || !$_SESSION['user_id']
       $_SESSION['about'] = $user["about"];
       $_SESSION['date'] = $user['date'];
       $_SESSION['favorites'] = $user["favorites"];
+      $_SESSION['download'] = $user["download"];
       $_SESSION['views'] = $user['views'];
       $_SESSION['rating'] = $user['rating'];
       $_SESSION['user_id'] = (int) $user['user_id'];
