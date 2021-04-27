@@ -54,7 +54,7 @@ opacity:0;
   text-align:center;
   padding:25px 15px;
   background-color:var(--cont-bg-color);
-  margin:10px 0;
+  /* margin:10px 0; */
   font-size:20px;
 }
 .page_num,.sel_page{
@@ -157,7 +157,7 @@ opacity:0;
   min-height:100px;
   transition:background-color 0.3s ease-in-out;
   cursor:pointer;
-/*   border-left:2px solid #af2828; */
+  /*   border-left:2px solid #af2828; */
 }
 .auto-left{
   padding:8px;
@@ -177,7 +177,7 @@ opacity:0;
   color:#c9c9d9;
 }
 .auto-item:hover{
-  background-color:#af2828;
+  background-color: var(--bg-color-anim);
 }
 .for_user{
   width:8vh;

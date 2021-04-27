@@ -1,5 +1,5 @@
 .block-art {
-  background-color: #0a0b14;
+  background-color: var(--cont-bg-color);
   position: relative;
   padding: 20px;
   z-index: 9;
@@ -158,6 +158,10 @@
 }
 .comm__like-img {
   width: 2.5vh;
+  transition:filter 0.3s ease-in-out;
+}
+.comm-like:hover > .comm__like-img{
+  filter:hue-rotate(170deg);
 }
 .comm-username {
   font-size: larger;
@@ -208,7 +212,7 @@
 .stat-item {
   padding: 10px;
   text-align: center;
-  background-color: #0a0b14;
+  background-color: var(--cont-bg-color);
   transition: background-color 0.2s ease-in-out;
 }
 .stat__vidofa {
@@ -218,7 +222,7 @@
   flex-flow: column nowrap;
 }
 .stat-item:hover {
-  background-color: #171824;
+  background-color: #232533;
 }
 .rev_like {
   filter: hue-rotate(170deg);
@@ -290,7 +294,7 @@
   transition:background-color 0.2s ease-in-out;
 }
 .edit-review__btn:hover, #write-review:hover{
-  background-color:#2f374e;
+  background-color: #3c4765;
 }
 .bl__write-review{
   text-align:center;

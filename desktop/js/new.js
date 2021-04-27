@@ -1218,6 +1218,7 @@ function updateAvatar(e) {
     .then(text)
     .then((res) => {
       this.style.display = "none";
+      sessionStorage.removeItem("?do=profile");
       noticeAll("Аватар обновлен");
     })
     .catch((err) => {
