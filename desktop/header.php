@@ -14,13 +14,12 @@
             </svg>
           </button>
           <div id="autocomplete" class="auto-hidden" style="visibility:hidden;">
-
           </div>
         </form>
       </div>
       <div id="user-hand-js" class="for_user">
-        <div class="menu-for"><img id="img_user-js" src="<?echo $_SESSION['auth_flag'] ? $_SESSION['picture'] : "
-            asset/user.svg"; ?>" class="img-user
+        <div class="menu-for"><img onerror="this.src='asset/user.svg'" id="img_user-js"
+            src="<?echo $_SESSION['auth_flag'] ? $_SESSION['picture'] : " asset/user.svg"; ?>" class="img-user
           <?echo $_SESSION['auth_flag'] ? " login-true" : ""; ?>">
         </div>
         <div class="for-reg_login">
@@ -31,14 +30,15 @@
           <div class="block-us_menu">
             <div class="register block-cont">
               <form class="form-for-reg" id="register">
-                <input autocomplete="username" placeholder="Никнейм" class="input-user" type="text" name="nick"
-                  id="rnick">
-                <input autocomplete="email" placeholder="Email" class="input-user" type="email" name="mail" id="email">
+                <input required oninput="nickCheck(this)" autocomplete="username" placeholder="Никнейм"
+                  class="input-user" type="text" name="nick" id="rnick">
+                <input required autocomplete="email" placeholder="Email" class="input-user" type="email" name="mail"
+                  id="email">
                 <div class="block-pass">
-                  <input autocomplete="new-password" placeholder="Пароль" class="input-user" type="password"
+                  <input required autocomplete="new-password" placeholder="Пароль" class="input-user" type="password"
                     name="rpass" id="rpass">
-                  <label onclick="showPass(this)" class="check-lab off"><input name="vsp" type="checkbox"
-                      class="pass-check">
+                  <label class="check-lab"><input onclick="showPass(this, 'rpass')" name="vsp" type="checkbox"
+                      class="pass-check off">
                     Показать
                     пароль</label>
                 </div>
@@ -47,13 +47,13 @@
             </div>
             <div class="login block-cont active-menu">
               <form class="form-for-reg" id="login">
-                <input autocomplete="username" placeholder="Никнейм" class="input-user" type="text" name="nick"
+                <input required autocomplete="username" placeholder="Никнейм" class="input-user" type="text" name="nick"
                   id="lnick">
                 <div class="block-pass">
-                  <input autocomplete="current-password" placeholder="Пароль" class="input-user" type="password"
-                    name="lpass" id="lpass">
-                  <label onclick="showPass(this)" class="check-lab off"><input name="vsp" type="checkbox"
-                      class="pass-check">
+                  <input required autocomplete="current-password" placeholder="Пароль" class="input-user"
+                    type="password" name="lpass" id="lpass">
+                  <label class="check-lab"><input onclick="showPass(this, 'lpass')" name="vsp" type="checkbox"
+                      class="pass-check off">
                     Показать
                     пароль</label>
                 </div>

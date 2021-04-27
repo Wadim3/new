@@ -5,36 +5,40 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/baguetteBox.css" />
     <title>Document</title>
   </head>
   <body>
-    <div class="block-gallery">
-      <div class="gallery">
-        <a
-          href="https://s1.torrents-igruha.org/uploads/posts/2020-06/1592845478_ss_e5892ca70573e61686cad59fc1abcc1ccdc222cb.1920x1080.jpg"
-          data-caption="Image caption"
-        >
-          <img
-            src="https://s1.torrents-igruha.org/uploads/posts/2020-06/thumbs/1592845551_ss_6537d5d9abdb669c9486233e13fd3c026392d982.1920x1080.jpg"
-            alt="First image"
-          />
-        </a>
-        <a
-          href="https://s1.torrents-igruha.org/uploads/posts/2020-06/1592845544_ss_af6e3ef58d2925a1843e951f6b01c228ac24ffec.1920x1080.jpg"
-        >
-          <img
-            src="https://s1.torrents-igruha.org/uploads/posts/2020-06/thumbs/1592845469_ss_ad095f87bec662dadf4ab949a1307923f3a9be30.1920x1080.jpg"
-            alt="Second image"
-          />
-        </a>
+    <div class="cont__block comment-block">
+      <div class="title_block">Отзывы:</div>
+      <div id="content-comment">
+        <div class="comm-item">
+          <div class="comm-left">
+            <img src="asset/avatar.jpg" class="comm-image" />
+          </div>
+          <div class="comm-right">
+            <div class="comm-username">wader3301</div>
+            <div class="comm-data">
+              <span class="comm-value">5 ★</span>
+              <span class="comm-date">03.02.2020</span>
+            </div>
+            <div class="comm-text">
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non
+              exearum possimus aut ab! Ex, odit quam numquam blanditiis optio
+              et?Unde officiis accusantium eveniet culpa et repellat
+              deseruntvelit.
+            </div>
+            <span class="comm-like">
+              <img
+                review-id="2935"
+                class="comm__like-img"
+                src="asset/like.svg"
+                alt="Полезный"
+              />
+              <span class="comm__like-num">2932</span>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   </body>
-  <script src="js/baguetteBox.js" async></script>
-  <script>
-    window.addEventListener("load", function () {
-      baguetteBox.run(".gallery");
-    });
-  </script>
 </html>

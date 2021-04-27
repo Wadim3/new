@@ -19,7 +19,7 @@
           </span>
         </div>
       </div>
-      <div class="search">
+      <div id="search">
         <form id="search_grid">
           <select class="search_item select-css first_line_item" name="sort" id="search-sort" size="1">
             <?

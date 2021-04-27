@@ -14,30 +14,25 @@ if (!empty($_POST['rating'])) {
     if ($result['value'] != $_POST['rating']) {
       $request .= "`value`={$value}";
     }
-    if ($result['text_review'] != $_POST['textrev']) {
-      if ($result['value'] != $_POST['rating']) {
+    if ($result['text_review'] != $text) {
+      if ($result['value'] != $value) {
         $request .= ",";
       }
       $request .= "`text_review`='{$text}'";
     }
     $request .= " WHERE `game_id`={$_SESSION['this_game']} AND `user_id`=" . $_SESSION['user_id'];
     $res = $mysqli->query($request);
-    $action = "UPDATE";
+    $insert = 0;
   } else {
-    $request = "INSERT INTO `rating`(`id_rev`, `game_id`, `user_id`, `value`, `date`, `text_review`) VALUES (NULL,{$_SESSION['this_game']},{$_SESSION['user_id']},{$value},current_timestamp(),'{$text}')";
+    $request = "INSERT INTO `rating`(`id_rev`, `game_id`, `user_id`, `value`, `date`, `text_review`, `likes`) VALUES (NULL,{$_SESSION['this_game']},{$_SESSION['user_id']},{$value},current_timestamp(),'{$text}', 0)";
     $res = $mysqli->query($request);
-    $action = "INSERT";
+    $insert = 1;
   }
-  $order = 1;
-  $jsonRes[$order] = [
-    "action" => $action,
-    "rev_id" => $mysqli->insert_id,
-    "value" => $value,
-    "date" => strftime("%x"),
-    "text_review" => $text,
-    "likes" => 0,
-    "nickname" => $_SESSION['user_name'],
-    "picture" => $_SESSION['picture'],
+  $jsonRes[0] = [
+    "0" => $mysqli->insert_id,
+    "1" => $value,
+    "2" => $text,
+    "3" => $insert,
   ];
   echo json_encode($jsonRes);
 }

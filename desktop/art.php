@@ -26,11 +26,12 @@ if (!empty($_GET['art'])) {
       } while ($mysqli->more_results() && $mysqli->next_result());
     }
   }
-  $request = "SELECT `fulldescip`.*,`game`.`name`, `game`.`image`  FROM `fulldescip`, `game` WHERE `game`.`game_id`=`fulldescip`.`game_id` AND `fulldescip`.`game_id`=" . $art;
+  $user = (int) $_SESSION['user_id'];
+  $request = "SELECT MAX(IF(`favorites`.`user_id` = {$user}, 1,0)) AS 'favorit',`fulldescip`.*,`game`.`name`,`game`.`image`,`game`.`views`,`game`.`downloads`,COUNT(`favorites`.`user_id`),`avg_rating`.`avg`,`avg_rating`.`count` FROM `fulldescip`,`game` LEFT JOIN `favorites` ON `favorites`.`game_id` = `game`.`game_id` LEFT JOIN `avg_rating` ON `avg_rating`.`game_id` = `game`.`game_id` WHERE `game`.`game_id` = `fulldescip`.`game_id` AND `fulldescip`.`game_id` = {$art}";
+  // echo $request;
   $res = $mysqli->query($request);
   echo json_encode($res->fetch_all(), JSON_UNESCAPED_UNICODE);
 }
-
 // <div class="block-art">
 //   <div class="cont__block short__desc">
 //     <div class="left__short-desc">

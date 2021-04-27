@@ -5,11 +5,11 @@
   outline: 0;
 }
 :root {
-  --main-bg-color: rgba(5, 8, 15, 0.97);
-  --main-text-color: rgba(173, 199, 199, 0.925);
+  --main-bg-color: rgb(5 8 15);
+  --main-text-color: #c6dddd;
   --cont-bg-color: rgba(10, 10, 19, 0.72);
   --border-color-anim: rgba(51, 51, 148, 0.952);
-  --bg-color-anim: rgba(7, 10, 49, 0.88);
+  --bg-color-anim: rgb(175 40 40);
   --bg-slider-anim: rgba(9, 10, 32, 0.486);
   --color-selection: #3b979e;
   font-size: 1.03vw;
@@ -21,7 +21,7 @@
   background: var(--color-selection);
 }
 ::-webkit-input-placeholder {
-  color: #a2a492;
+  color: #9298a4;
   font-family: "Open Sans", sans-serif;
   font-size: 1.1em;
 }
@@ -150,7 +150,7 @@ header {
   flex-flow: row nowrap;
   margin: 15px 0;
   padding: 10px;
-  transition: all 0.3s linear;
+  transition: background-color 0.3s linear;
 }
 .cont_cent {
   display:flex;
@@ -184,9 +184,9 @@ header {
   float: left;
   margin-bottom: 5px;
 }
-.description {
+#description {
   margin: 10px 0;
-  float: left;
+  /* float: left; */
   min-height: 60%;
 }
 .line_view {
@@ -244,9 +244,9 @@ header {
   padding: 10px 15px;
 }
 .cat_list {
-  border-left: 3px solid transparent;
+  /* border-left: 3px solid transparent; */
   padding: 5% 0 5% 6%;
-  transition: all 0.3s linear;
+  transition: background-color 0.3s linear;
 }
 #js_cat {
   display: grid;
@@ -275,13 +275,13 @@ header {
 }
 .cat_list:hover:not(.select_cat), .all_game:hover {
   background-color: var(--bg-color-anim);
-  border-color: var(--border-color-anim);
-  color:var(--main-text-color);
+  /* border-color: var(--border-color-anim); */
+  /* color:var(--main-text-color); */
 }
 .table_content .content_item {
   width: 25%;
   border-left: none;
-  border-bottom: 5px solid transparent;
+  /* border-bottom: 5px solid transparent; */
 }
 .table_content .info_item {
   display: none;
@@ -298,7 +298,7 @@ header {
 }
 .content_item:hover {
   background-color: var(--bg-color-anim);
-  border-color: var(--border-color-anim);
+  /* border-color: var(--border-color-anim); */
 }
 .title_categorie {
   display: flex;
@@ -316,10 +316,11 @@ header {
   position: relative;
   overflow: hidden;
   margin: 0 auto;
+  z-index: 99;
   will-change: auto;
 }
 #slider__wrapper {
-  /* position:relative; */
+  position:relative;
   display: flex;
   transition: transform 0.6s ease;
   will-change:transform;
@@ -333,6 +334,7 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
+  /* position: relative; */
   max-width: 20%;
   flex: 0 0 25%;
 }
@@ -344,6 +346,8 @@ header {
 .cent__item {
   margin: auto;
   text-align: center;
+  /* position: relative; */
+  /* z-index: 111; */
 }
 .second_item:hover {
   background-color: var(--bg-slider-anim);
@@ -353,6 +357,7 @@ header {
   display: block;
   position: relative;
   text-transform: capitalize;
+  /* z-index: 666; */
   width: 100%;
   transition: background-color 0.4s linear;
   will-change: transform;
@@ -681,7 +686,7 @@ header {
   font-size: 1rem;
   position: absolute;
   color: #9494c3;
-  z-index: 10;
+  z-index: 9;
 }
 .noUi-value {
   position: absolute;
@@ -726,4 +731,63 @@ header {
 }
 .noUi-marker-horizontal.noUi-marker-large {
   height: 12px;
+}
+#description{
+  display:flex;
+  flex-flow:row nowrap;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px;
+}
+.desc__left-feedback{
+  margin-left:30px;
+}
+.desc__right-social{
+  display:flex;
+  flex-flow:row nowrap;
+}
+.social{
+  padding:15px;
+  transition:background-color 0.2s ease-in-out;
+  border-radius:19px;
+  margin:0 5px;
+}
+.social:hover{
+  background-color:#1a1f2e;
+}
+.social-icon{
+  width:3.5vh;
+  display: block;
+}
+#feedback{
+  padding:15px;
+  border-radius:30px;
+  color:#71a8c1;
+  cursor: pointer;
+}
+#feedback:hover{
+  background-color:#1a1f2e;
+}
+.setting-profile, .leave-review{
+  position:fixed;
+  background-color:#131723ba;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  z-index:990;
+  opacity: 1;
+  transition:opacity 0.2s ease-in-out;
+  display:flex;
+  justify-content:center;
+}
+.hidden-rev{
+  opacity:0;
+  visibility:hidden;
+}
+.invalid{
+  background-color: #512e2e!important;
+}
+.pass-check{
+  margin:0 5px;
 }

@@ -5,5 +5,6 @@
     <link rel="stylesheet" href="css/art.css">
     <link rel="stylesheet" href="css/err.css">
     <link rel="stylesheet" href="css/profile.css">
+    <link rel="stylesheet" href="css/feedback.css">
     <link rel="stylesheet" href="css/baguetteBox.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />

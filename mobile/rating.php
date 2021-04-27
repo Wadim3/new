@@ -9,12 +9,10 @@ if (isset($_POST['rating']) && $_SESSION['user_id']) {
     if (!$mysqli->query($request)) {
       http_response_code(500);
     }
-
   } else {
     $request = "INSERT INTO `rating`(`game_id`, `user_id`, `value`, `date`) VALUES ({$_SESSION['this_game']},{$_SESSION['user_id']},{$ratValue},current_timestamp())";
     if (!$mysqli->query($request)) {
       http_response_code(500);
     }
-
   }
 }

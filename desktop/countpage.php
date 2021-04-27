@@ -7,7 +7,7 @@ function calcPage($all)
 }
 $arrPage = [];
 if (isset($_GET['ct'])) {
-  $countReq = "SELECT COUNT(`game`.`game_id`) AS 'count' FROM `game` LEFT JOIN `cat_game` ON `cat_game`.`game_id` = `game`.`game_id` WHERE `cat_game`.`cat_id` = " . (int) $_GET['ct'];
+  $countReq = "SELECT COUNT(DISTINCT `game`.`game_id`) AS 'count' FROM `game` LEFT JOIN `cat_game` ON `cat_game`.`game_id` = `game`.`game_id` WHERE `cat_game`.`cat_id` = " . (int) $_GET['ct'];
   $res = $mysqli->query($countReq);
   $result = $res->fetch_assoc();
   $arrPage['count'] = calcPage($result['count']);
